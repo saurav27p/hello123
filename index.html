@@ -1,0 +1,104 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="Namaste Nepal — a visual journal celebrating the places, people, and small wonders of Nepal.">
+  <title>Namaste Nepal — Find your way</title>
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body id="home">
+  <div data-include="header.html"></div>
+
+  <main>
+    <section class="hero">
+      <div class="container hero-content">
+        <div class="hero-copy">
+          <span class="eyebrow">A living story of the Himalayas</span>
+          <h1>Find your way to <em>Nepal.</em></h1>
+          <p class="hero-description">A country of high mountain air, ancient cities, and everyday moments that feel a little bit magical.</p>
+          <div class="hero-actions">
+            <a class="button" href="#destinations">Start exploring <span class="arrow">↘</span></a>
+            <a class="text-link" href="#stories">Read our stories <span>→</span></a>
+          </div>
+        </div>
+        <div class="hero-card">
+          <span class="card-number">01 / 04</span>
+          <h2>Where the sky feels close enough to touch.</h2>
+          <p>From a quiet sunrise over Phewa Lake to prayer flags above the clouds.</p>
+        </div>
+      </div>
+      <div class="container hero-meta"><span>27°42′N 85°19′E</span><span>Scroll to wander ↓</span></div>
+    </section>
+
+    <div class="container page-layout">
+      <div class="sidebar-slot" data-include="sidebar.html"></div>
+
+      <div class="content-column">
+        <section class="content-section" id="destinations">
+          <div class="section-heading">
+            <div><span class="eyebrow">Places worth the journey</span><h2>Every turn reveals a different Nepal.</h2></div>
+            <p>Choose a direction. The mountains, temples, and warm cups of chiya will take care of the rest.</p>
+          </div>
+          <div class="destinations-grid">
+            <a class="destination-card" href="#everest">
+              <img src="https://images.unsplash.com/photo-1528181304800-259b08848526?auto=format&fit=crop&w=1200&q=85" alt="Snowy Himalayan mountains under a blue sky" loading="lazy">
+              <div class="destination-copy"><span class="tag">The high route</span><h3>Everest Region</h3></div>
+            </a>
+            <div class="destination-stack">
+              <a class="destination-card small" href="#pokhara">
+                <img src="https://images.unsplash.com/photo-1533130061792-64b345e4a833?auto=format&fit=crop&w=900&q=85" alt="Peaceful lake surrounded by green hills" loading="lazy">
+                <div class="destination-copy"><span class="tag">Slow mornings</span><h3>Pokhara</h3></div>
+              </a>
+              <a class="destination-card small" href="#kathmandu">
+                <img src="https://images.unsplash.com/photo-1605649487212-47bdab064df7?auto=format&fit=crop&w=900&q=85" alt="Traditional temple architecture in Kathmandu" loading="lazy">
+                <div class="destination-copy"><span class="tag">Ancient rhythm</span><h3>Kathmandu Valley</h3></div>
+              </a>
+            </div>
+          </div>
+        </section>
+
+        <section class="story-band" id="stories">
+          <blockquote class="story-quote">“Nepal is not just a place you visit. It is a feeling you <em>carry home.</em>”</blockquote>
+          <div class="story-copy"><p>There is a generosity to the light here — in the mountains, in the courtyards, in the people who always make room for one more at the table.</p><span class="story-signature">— From the journal</span></div>
+        </section>
+
+        <section class="newsletter" id="newsletter">
+          <div><span class="eyebrow">A note from Nepal</span><h2>Stories for your next daydream.</h2></div>
+          <form class="newsletter-form" onsubmit="event.preventDefault(); this.querySelector('button').textContent = '✓';">
+            <input type="email" placeholder="Your email address" aria-label="Your email address" required>
+            <button type="submit" aria-label="Subscribe">→</button>
+          </form>
+        </section>
+      </div>
+    </div>
+  </main>
+
+  <div data-include="footer.html"></div>
+
+  <script>
+    async function loadComponents() {
+      const slots = [...document.querySelectorAll('[data-include]')];
+      await Promise.all(slots.map(async (slot) => {
+        const response = await fetch(slot.dataset.include);
+        if (!response.ok) throw new Error('Could not load ' + slot.dataset.include);
+        slot.innerHTML = await response.text();
+      }));
+
+      document.querySelectorAll('[data-year]').forEach((year) => { year.textContent = new Date().getFullYear(); });
+      const sidebarSlot = document.querySelector('.sidebar-slot');
+      const menuToggle = document.querySelector('.menu-toggle');
+      const closeButton = document.querySelector('.sidebar-close');
+      const setMenu = (open) => {
+        sidebarSlot.classList.toggle('is-open', open);
+        menuToggle.setAttribute('aria-expanded', String(open));
+      };
+      menuToggle.addEventListener('click', () => setMenu(true));
+      closeButton.addEventListener('click', () => setMenu(false));
+      sidebarSlot.addEventListener('click', (event) => { if (event.target === sidebarSlot) setMenu(false); });
+      sidebarSlot.querySelectorAll('a').forEach((link) => link.addEventListener('click', () => setMenu(false)));
+    }
+    loadComponents().catch((error) => console.error(error));
+  </script>
+</body>
+</html>
